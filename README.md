@@ -1,3 +1,7 @@
+[![npm version](https://img.shields.io/npm/v/stringloom.svg)](https://www.npmjs.com/package/stringloom)
+[![npm downloads](https://img.shields.io/npm/dm/stringloom.svg)](https://www.npmjs.com/package/stringloom)
+[![license](https://img.shields.io/npm/l/stringloom.svg)](https://github.com/robinafaruqia/string-utils-lib/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/robinafaruqia/string-utils-lib.svg?style=social)](https://github.com/robinafaruqia/string-utils-lib)
 # stringloom
 
 A lightweight, zero-dependency collection of string manipulation utilities for JavaScript and TypeScript. Think of it as a focused alternative to lodash's string methods.
