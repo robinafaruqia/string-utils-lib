@@ -56,6 +56,18 @@ truncate("abcdefghij", { length: 7, ellipsis: "...", wordBoundary: false })
 | `ellipsis`     | `string` | `"…"`   | String appended when truncated       |
 | `wordBoundary` | `boolean`| `true`  | Truncate at nearest word boundary    |
 
+### Truncate (Middle)
+
+```typescript
+truncateMiddle("abcdefghijklmnopqrstuvwxyz", { length: 10 })
+// "abcde…wxyz"
+```
+
+| Option     | Type     | Default | Description                          |
+|------------|----------|---------|--------------------------------------|
+| `length`   | `number` | `30`    | Max length including ellipsis        |
+| `ellipsis` | `string` | `"…"`   | String inserted in the middle        |
+
 ### Capitalize
 
 ```typescript
@@ -134,6 +146,18 @@ stripWhitespace("  h e l l o  ")        // "hello"
 collapseWhitespace("  hello   world  ") // "hello world"
 ```
 
+### Deburr (Remove Accents)
+
+```typescript
+deburr("Héllo Wörld") // "Hello World"
+```
+
+### Escape RegExp
+
+```typescript
+escapeRegExp("hello.*(world)?") // "hello\\.\\*\\(world\\)\\?"
+```
+
 ### Checks
 
 ```typescript
@@ -142,6 +166,22 @@ isBlank("  ")              // true
 isNumeric("12345")         // true
 isAlpha("hello")           // true
 isAlphanumeric("hello123") // true
+```
+
+### Validators
+
+```typescript
+isEmail("a@b.com")           // true
+isEmail("not-an-email")      // false
+isUrl("https://example.com") // true
+isUrl("example.com")         // false
+```
+
+### Sanitize Filename
+
+```typescript
+sanitizeFilename("my<file>:name?.txt") // "my_file_name_.txt"
+sanitizeFilename("CON")                // "_CON"
 ```
 
 ### Initials
@@ -168,7 +208,9 @@ excerpt("The quick brown fox jumps over the lazy dog", "fox", { radius: 5 })
 | Function             | Description                                      |
 |----------------------|--------------------------------------------------|
 | `slugify`            | Convert string to URL-friendly slug              |
+| `deburr`             | Remove accents/diacritics                        |
 | `truncate`           | Truncate with ellipsis & word boundary support   |
+| `truncateMiddle`     | Truncate from the middle                         |
 | `capitalize`         | Capitalize first letter                          |
 | `capitalizeWords`    | Capitalize first letter of every word            |
 | `toCamelCase`        | Convert to camelCase                             |
@@ -189,11 +231,15 @@ excerpt("The quick brown fox jumps over the lazy dog", "fox", { radius: 5 })
 | `stripHtml`          | Remove HTML tags                                 |
 | `stripWhitespace`    | Remove all whitespace                            |
 | `collapseWhitespace` | Collapse whitespace to single spaces             |
+| `escapeRegExp`       | Escape a string for safe regex usage             |
 | `isPalindrome`       | Check if string is a palindrome                  |
 | `isBlank`            | Check if string is empty/whitespace              |
 | `isNumeric`          | Check if string is all digits                    |
 | `isAlpha`            | Check if string is all letters                   |
 | `isAlphanumeric`     | Check if string is letters + digits              |
+| `isEmail`            | Basic email validation                           |
+| `isUrl`              | Check if string is a valid http/https URL        |
+| `sanitizeFilename`   | Sanitize a string for safe filenames             |
 | `initials`           | Extract initials from a name                     |
 | `excerpt`            | Extract snippet around a search phrase           |
 

@@ -1,7 +1,9 @@
 import { describe, it, expect } from "vitest";
 import {
   slugify,
+  deburr,
   truncate,
+  truncateMiddle,
   capitalize,
   capitalizeWords,
   toCamelCase,
@@ -22,11 +24,15 @@ import {
   stripHtml,
   stripWhitespace,
   collapseWhitespace,
+  escapeRegExp,
   isPalindrome,
   isBlank,
   isNumeric,
   isAlpha,
   isAlphanumeric,
+  isEmail,
+  isUrl,
+  sanitizeFilename,
   initials,
   excerpt,
 } from "./index.js";
@@ -298,5 +304,75 @@ describe("excerpt", () => {
   it("does not add omission at the start if at beginning", () => {
     const result = excerpt("fox jumps over", "fox", { radius: 5 });
     expect(result.startsWith("…")).toBe(false);
+  });
+});
+
+describe("deburr", () => {
+  it("removes diacritics", () => {
+    expect(deburr("Héllo Wörld")).toBe("Hello World");
+  });
+
+  it("handles special characters", () => {
+    expect(deburr("straße")).toBe("strasse");
+  });
+});
+
+describe("escapeRegExp", () => {
+  it("escapes regex special characters", () => {
+    expect(escapeRegExp("hello.*(world)?")).toBe("hello\\.\\*\\(world\\)\\?");
+  });
+});
+
+describe("isEmail", () => {
+  it("validates basic emails", () => {
+    expect(isEmail("a@b.com")).toBe(true);
+    expect(isEmail("john.doe@example.com")).toBe(true);
+  });
+
+  it("rejects invalid emails", () => {
+    expect(isEmail("not-an-email")).toBe(false);
+    expect(isEmail("a@b")).toBe(false);
+    expect(isEmail("a@@b.com")).toBe(false);
+    expect(isEmail("a@b..com")).toBe(false);
+  });
+});
+
+describe("isUrl", () => {
+  it("validates http/https urls", () => {
+    expect(isUrl("https://example.com")).toBe(true);
+    expect(isUrl("http://example.com/path?x=1")).toBe(true);
+  });
+
+  it("rejects non-http(s) or invalid urls", () => {
+    expect(isUrl("ftp://example.com")).toBe(false);
+    expect(isUrl("example.com")).toBe(false);
+    expect(isUrl("")).toBe(false);
+  });
+});
+
+describe("sanitizeFilename", () => {
+  it("replaces invalid characters", () => {
+    expect(sanitizeFilename('my<file>:name?.txt')).toBe("my_file_name_.txt");
+  });
+
+  it("avoids reserved windows names", () => {
+    expect(sanitizeFilename("CON")).toBe("_CON");
+    expect(sanitizeFilename("con.txt")).toBe("_con.txt");
+  });
+
+  it("removes trailing dots/spaces", () => {
+    expect(sanitizeFilename("hello. ")).toBe("hello");
+  });
+});
+
+describe("truncateMiddle", () => {
+  it("truncates from the middle", () => {
+    expect(truncateMiddle("abcdefghijklmnopqrstuvwxyz", { length: 10 })).toBe(
+      "abcde…wxyz",
+    );
+  });
+
+  it("does not truncate when under limit", () => {
+    expect(truncateMiddle("hello", { length: 10 })).toBe("hello");
   });
 });

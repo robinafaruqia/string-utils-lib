@@ -51,11 +51,11 @@
   },
   "sideEffects": false,
   "homepage": "https://www.npmjs.com/package/stringloom",
-"repository": {
-  "type": "git",
-  "url": "git+https://github.com/robinafaruqia/string-utils-lib.git"
-},
-"bugs": {
-  "url": "https://github.com/robinafaruqia/string-utils-lib/issues"
-}
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robinafaruqia/string-utils-lib.git"
+  },
+  "bugs": {
+    "url": "https://github.com/robinafaruqia/string-utils-lib/issues"
+  }
 }

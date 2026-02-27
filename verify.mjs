@@ -6,7 +6,9 @@
  */
 import {
   slugify,
+  deburr,
   truncate,
+  truncateMiddle,
   capitalize,
   capitalizeWords,
   toCamelCase,
@@ -27,11 +29,15 @@ import {
   stripHtml,
   stripWhitespace,
   collapseWhitespace,
+  escapeRegExp,
   isPalindrome,
   isBlank,
   isNumeric,
   isAlpha,
   isAlphanumeric,
+  isEmail,
+  isUrl,
+  sanitizeFilename,
   initials,
   excerpt,
 } from "./dist/index.js";
@@ -65,6 +71,13 @@ console.log("\n── truncate ──");
 check('truncate(short)', truncate("hello", { length: 10 }), "hello");
 check('truncate(long, no wordBoundary)', truncate("abcdefghij", { length: 5, wordBoundary: false }), "abcd…");
 check('truncate(custom ellipsis)', truncate("abcdefghij", { length: 7, ellipsis: "...", wordBoundary: false }), "abcd...");
+
+console.log("\n── truncateMiddle ──");
+check(
+  'truncateMiddle("abcdefghijklmnopqrstuvwxyz", { length: 10 })',
+  truncateMiddle("abcdefghijklmnopqrstuvwxyz", { length: 10 }),
+  "abcde…wxyz",
+);
 
 console.log("\n── capitalize ──");
 check('capitalize("hello world")', capitalize("hello world"), "Hello world");
@@ -104,6 +117,29 @@ console.log("\n── strip ──");
 check('stripHtml("<p>Hello</p>")', stripHtml("<p>Hello <b>World</b></p>"), "Hello World");
 check('stripWhitespace(" h e l l o ")', stripWhitespace("  h e l l o  "), "hello");
 check('collapseWhitespace("  hello   world  ")', collapseWhitespace("  hello   world  "), "hello world");
+
+console.log("\n── deburr ──");
+check('deburr("Héllo Wörld")', deburr("Héllo Wörld"), "Hello World");
+
+console.log("\n── escapeRegExp ──");
+check(
+  'escapeRegExp("hello.*(world)?")',
+  escapeRegExp("hello.*(world)?"),
+  "hello\\.\\*\\(world\\)\\?",
+);
+
+console.log("\n── validators ──");
+check('isEmail("a@b.com")', isEmail("a@b.com"), true);
+check('isEmail("not-an-email")', isEmail("not-an-email"), false);
+check('isUrl("https://example.com")', isUrl("https://example.com"), true);
+check('isUrl("ftp://example.com")', isUrl("ftp://example.com"), false);
+
+console.log("\n── sanitizeFilename ──");
+check(
+  'sanitizeFilename("my<file>:name?.txt")',
+  sanitizeFilename("my<file>:name?.txt"),
+  "my_file_name_.txt",
+);
 
 console.log("\n── checks ──");
 check('isPalindrome("Racecar")', isPalindrome("Racecar"), true);
